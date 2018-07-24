@@ -20,5 +20,9 @@ namespace Omada.Pages
 
         [FindsBy(How = How.CssSelector, Using = ".header__search input.header__search-input")]
         public IWebElement searchInput;
+
+        [FindsBy(How = How.XPath, Using = "//a[@class='footer__menulink--submenu' and text()='Cases']")]
+        public IWebElement Cases;
+
     }
 }
