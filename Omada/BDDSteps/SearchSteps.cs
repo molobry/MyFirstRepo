@@ -15,7 +15,7 @@ namespace Omada.BDDSteps
     [Binding]
     class SearchSteps
     {
-        IWebDriver driver = BaseClass.driver;
+        IWebDriver driver = Driver.driver;
 
         [When(@"I want to search for '(.*)'")]
         public void WhenIWantToSearchFor(string searchPhrase)
@@ -67,6 +67,32 @@ namespace Omada.BDDSteps
             var elems = driver.FindElements(By.XPath("//*[text()='"+newsTitle+"']"));
             Assert.IsTrue(elems.Count > 0, "I have not found any newses");
         }
+
+        [Then(@"I want to check that there is '(.*)' among those results")]
+        public void ThenIWantToCheckThatThereIsAmongThoseResults(string searchPhrase)
+        {
+            bool exists = false;
+            var sections = driver.FindElements(By.CssSelector(".search-results__item"));
+            foreach(var section in sections)
+            {
+                string text = section.Text;
+                exists = section.Text.Contains(searchPhrase);
+                if(exists)
+                {
+                    Assert.True(exists, "There is phrase {0} in search results", searchPhrase);
+                    break;
+                    
+                }
+
+            }
+            if(!exists)
+            {
+                Assert.Fail("There is phrase {0} in search results", searchPhrase);
+            }
+            
+
+        }
+
 
 
 

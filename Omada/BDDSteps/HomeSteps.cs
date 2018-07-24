@@ -16,12 +16,15 @@ namespace Omada.BDDSteps
     [Binding]
     public class HomeSteps
     {
-        IWebDriver driver = BaseClass.driver;
+        IWebDriver driver = Driver.driver;
 
         [When(@"I have open home test page")]
         public void WhenIHaveOpenHomeTestPage()
         {
-            driver.Navigate().GoToUrl("https://www.omada.net/");
+            driver.Navigate().GoToUrl(ConfigurationManager.AppSettings["TestURL"]);
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("a.header__menulink--megamenu.js-menulink[href='/en-us/more']")));
+
         }
 
 
@@ -29,6 +32,7 @@ namespace Omada.BDDSteps
         [Then(@"I want check if header elements are displayed")]
         public void ThenIWantCheckIfHeaderElementsAreDisplayed()
         {
+            
             var headerLinks = driver.FindElements(By.CssSelector("ul.header__menu--function-nav a"));
             Assert.AreEqual(6, headerLinks.Count, "Probably one of header links is missing");
         }
@@ -58,6 +62,40 @@ namespace Omada.BDDSteps
             CommonNavigation commonNavigation = new CommonNavigation(driver);
             commonNavigation.contact.Click();
         }
+
+        [Then(@"I want to check if privacy policy is no longer visible")]
+        public void ThenIWantToCheckIfPrivacyPolicyIsNoLongerVisible()
+        {
+            bool privacyPolicyVisible = driver.FindElement(By.CssSelector(".brick.cookiebar--variant1.has-background.background--quaternary")).Displayed;
+
+            Assert.False(privacyPolicyVisible, "Privacy policy is still visible");
+
+        }
+
+        [When(@"I click Cases from Resources")]
+        public void WhenIClickCasesFromResources()
+        {
+            HomePage homePage = new HomePage(driver);
+            homePage.Cases.Click(); 
+        }
+
+        [When(@"I want to open multiple tabs")]
+        public void WhenIWantToOpenMultipleTabs()
+        {
+            ((IJavaScriptExecutor)driver).ExecuteScript("window.open();");
+            ((IJavaScriptExecutor)driver).ExecuteScript("window.open();");
+            ((IJavaScriptExecutor)driver).ExecuteScript("window.open();");
+            ((IJavaScriptExecutor)driver).ExecuteScript("window.open();");
+            ((IJavaScriptExecutor)driver).ExecuteScript("window.open();");
+            ((IJavaScriptExecutor)driver).ExecuteScript("window.open();");
+        }
+
+
+
+
+
+
+
 
 
 
