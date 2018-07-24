@@ -87,7 +87,7 @@ namespace Omada.BDDSteps
             }
             if(!exists)
             {
-                Assert.Fail("There is phrase {0} in search results", searchPhrase);
+                Assert.Fail("There is no phrase {0} in search results", searchPhrase);
             }
             
 
